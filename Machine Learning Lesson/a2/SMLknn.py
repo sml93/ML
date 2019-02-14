@@ -67,12 +67,28 @@ def KNN(K, X_train, X_test, distance_function):
 	for i in range(len(X_test)):
 		dist = []
 		for j in range(len(X_train)):
+			
 			#Calculate distance between each X_test point with every X_train points
 			dist.append([j, distance_function(X_test[i], X_train[j])])
-			#Sort the distance from the shortest to the furthest
-			dist.sort(key = operator.itemgetter(1))
+			
+		#Sort the distance from the shortest to the furthest
+		dist.sort(key = operator.itemgetter(1))
+			
+		#Save the dist values based on K
+		neighbours = [item[0] for item in dist[:K]]
 
+		#Retrieve the output attribute of the K-nearest points in X_train
+		results = [X_train[index][8] for index in neighbours]
 
+	# Return the X_train point that have the most number of occurences
+	predictions = np.bincount(neighbours).argmax()
+
+	if predictions == int(X_test[i][8]):
+		correct += 1
+
+	return (correct / float(len(X_test))) * 100
+
+ 
 
 
 
